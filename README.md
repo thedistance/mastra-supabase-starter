@@ -74,6 +74,18 @@ npm run chat -- --user                          # sign in as the demo user
 npm run chat -- --email you@example.com --password yourpassword
 ```
 
+### Mastra Studio
+
+`MastraAuthSupabase` only verifies bearer tokens -- it doesn't expose a login form -- so
+Studio would otherwise show "Authentication Required ... no login method is configured."
+This starter subclasses it in `src/mastra/studio-auth.ts` with a `signIn()` that calls
+Supabase `signInWithPassword` and stores the access token in a cookie Studio can send back.
+
+Open http://localhost:4111 while `npm run dev` is running and sign in with the demo account
+above. Sign-up is disabled; this is a local-dev convenience only (Studio credentials login
+also requires Mastra's enterprise licence check, which is auto-satisfied in `mastra dev`
+but not in production without `MASTRA_LICENSE_KEY`).
+
 ### Anonymous -> registered linking
 
 Supabase supports linking an anonymous session to a registered account (turning the same
