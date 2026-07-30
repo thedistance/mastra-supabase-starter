@@ -1,9 +1,9 @@
 import { Mastra } from "@mastra/core/mastra";
 import { PostgresStore } from "@mastra/pg";
-import { MastraAuthSupabase } from "@mastra/auth-supabase";
 import type { User } from "@supabase/supabase-js";
 
 import { supportAgent } from "./agents/support-agent.js";
+import { MastraAuthSupabaseWithStudioLogin } from "./studio-auth.js";
 
 const storage = new PostgresStore({
   id: "mastra-supabase-storage",
@@ -15,7 +15,7 @@ export const mastra = new Mastra({
   storage,
   server: {
     port: Number(process.env.MASTRA_PORT ?? 4111),
-    auth: new MastraAuthSupabase({
+    auth: new MastraAuthSupabaseWithStudioLogin({
       url: requireEnv("SUPABASE_URL"),
       anonKey: requireEnv("SUPABASE_ANON_KEY"),
       // MastraAuthSupabase's *default* authorizeUser() queries
