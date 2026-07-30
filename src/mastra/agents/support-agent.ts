@@ -27,7 +27,7 @@ or inventing details such as prices or policy terms.
 Be concise and friendly. Remember details the customer has already told you earlier in the
 conversation.
 `.trim(),
-  model: process.env.MASTRA_MODEL ?? "anthropic/claude-sonnet-4-6",
+  model: process.env.MASTRA_MODEL ?? "openai/gpt-4o-mini",
   tools: { searchKnowledgeTool },
   memory: new Memory({
     options: {

@@ -41,6 +41,6 @@ describe.skipIf(!HAS_LLM_KEYS)("memory", () => {
 
 if (!HAS_LLM_KEYS) {
   console.log(
-    "Skipping memory tests: ANTHROPIC_API_KEY and/or OPENAI_API_KEY is not set.",
+    "Skipping memory tests: OPENAI_API_KEY is not set.",
   );
 }

@@ -47,7 +47,7 @@ describe("auth", () => {
 
   if (!HAS_LLM_KEYS) {
     console.log(
-      "Skipping authenticated 200 checks: ANTHROPIC_API_KEY and/or OPENAI_API_KEY is not set.",
+      "Skipping authenticated 200 checks: OPENAI_API_KEY is not set.",
     );
   }
 });

@@ -53,6 +53,6 @@ describe.skipIf(!HAS_LLM_KEYS)("rag", () => {
 
 if (!HAS_LLM_KEYS) {
   console.log(
-    "Skipping RAG tests: ANTHROPIC_API_KEY and/or OPENAI_API_KEY is not set.",
+    "Skipping RAG tests: OPENAI_API_KEY is not set.",
   );
 }

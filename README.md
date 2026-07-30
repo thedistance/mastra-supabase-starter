@@ -1,7 +1,7 @@
 # mastra-supabase-starter
 
 A companion repo for the blog post _"Integrating Mastra with Supabase: Auth, Memory and
-pgvector RAG in One Database"_ [link to blog post]. Clone it, run three commands, and
+pgvector RAG in One Database"_ [Medium](https://medium.com/@TheDistance/integrating-mastra-with-supabase-auth-memory-and-pgvector-rag-f2b7433c3b75?sharedUserId=TheDistance). Clone it, run three commands, and
 you'll have a working [Mastra](https://mastra.ai) agent with:
 
 - **Auth** via Supabase Auth, including anonymous sign-in, gating the Mastra server
@@ -16,8 +16,7 @@ project required.
 - [Docker](https://docs.docker.com/get-docker/) (for the Supabase CLI's local stack)
 - [Supabase CLI](https://supabase.com/docs/guides/local-development/cli/getting-started) (`npm install -g supabase` or your platform's package manager)
 - Node.js 20+
-- An [OpenAI API key](https://platform.openai.com/api-keys) (embeddings)
-- An [Anthropic API key](https://console.anthropic.com/) (the agent's LLM)
+- An [OpenAI API key](https://platform.openai.com/api-keys) (embeddings and the agent's LLM)
 
 ## Golden path
 
@@ -32,7 +31,7 @@ npm run chat          # in another
 
 `supabase start` prints an **API URL**, **anon key**, and **DB URL** -- copy the anon key
 into `.env` (the URL and DB URL defaults already match the local stack). Then add your
-`OPENAI_API_KEY` and `ANTHROPIC_API_KEY`.
+`OPENAI_API_KEY`.
 
 `npm run seed` chunks and embeds the knowledge base in `seed/knowledge/` into pgvector.
 `npm run dev` starts the Mastra server (default `http://localhost:4111`). `npm run chat`
@@ -151,9 +150,9 @@ Auth tokens, real HTTP requests to `MastraClient`.
   knowledge base; a question about a product Aurora Home doesn't sell gets an honest "I
   don't know" instead of an invented price
 
-Tests that call the live agent require `OPENAI_API_KEY` and `ANTHROPIC_API_KEY` -- if
-either is missing they skip with a clear message rather than failing. `supabase start` must
-already be running (tests don't manage the Supabase stack, only the Mastra server).
+Tests that call the live agent require `OPENAI_API_KEY` -- if it's missing they skip with
+a clear message rather than failing. `supabase start` must already be running (tests don't
+manage the Supabase stack, only the Mastra server).
 
 ## Going to production
 
@@ -195,8 +194,9 @@ conflicting process, or change `MASTRA_PORT` in `.env` (Supabase's ports are con
 Check `OPENAI_API_KEY` is set in `.env` and has access to `text-embedding-3-small`.
 
 **Chat responses fail or time out**
-Check `ANTHROPIC_API_KEY` is set in `.env`, and that `npm run dev` is running in another
-terminal.
+Check `OPENAI_API_KEY` is set in `.env`, and that `npm run dev` is running in another
+terminal. If you overrode `MASTRA_MODEL` to an Anthropic model, you also need
+`ANTHROPIC_API_KEY`.
 
 ## License
 
