@@ -1,7 +1,9 @@
 import { Mastra } from "@mastra/core/mastra";
+import { liveKitConnectionRoute } from "@mastra/livekit";
 import { PostgresStore } from "@mastra/pg";
 import type { User } from "@supabase/supabase-js";
 
+import { anekaAgent } from "./agents/aneka-agent.js";
 import { supportAgent } from "./agents/support-agent.js";
 import { MastraAuthSupabaseWithStudioLogin } from "./studio-auth.js";
 
@@ -11,7 +13,7 @@ const storage = new PostgresStore({
 });
 
 export const mastra = new Mastra({
-  agents: { supportAgent },
+  agents: { supportAgent, anekaAgent },
   storage,
   server: {
     port: Number(process.env.MASTRA_PORT ?? 4111),
@@ -36,6 +38,20 @@ export const mastra = new Mastra({
       // omit `resource` entirely when calling the agent (see src/scripts/chat.ts).
       mapUserToResourceId: (user: User) => user.id,
     }),
+    apiRoutes: [
+      // Mint LiveKit tokens + dispatch Aneka into the room for voice sessions.
+      // Requires LIVEKIT_URL / LIVEKIT_API_KEY / LIVEKIT_API_SECRET.
+      liveKitConnectionRoute({
+        agentName: process.env.LIVEKIT_AGENT_NAME ?? "aneka-voice",
+        metadata: ({ body }) => ({
+          agentId: String(body.agentId ?? "anekaAgent"),
+          threadId:
+            typeof body.threadId === "string" ? body.threadId : undefined,
+          resourceId:
+            typeof body.resourceId === "string" ? body.resourceId : undefined,
+        }),
+      }),
+    ],
   },
 });
 

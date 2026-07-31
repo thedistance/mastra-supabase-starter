@@ -198,6 +198,50 @@ Check `OPENAI_API_KEY` is set in `.env`, and that `npm run dev` is running in an
 terminal. If you overrode `MASTRA_MODEL` to an Anthropic model, you also need
 `ANTHROPIC_API_KEY`.
 
+## Aneka voice assistant
+
+This repo also includes **Aneka**, an inbound phone-call agent for trades businesses. It
+follows a structured call-handling prompt, speaks over LiveKit realtime voice, and notifies
+the owner with a WhatsApp summary before closing the call.
+
+### Text simulation (no LiveKit / WhatsApp credentials required)
+
+```bash
+# In .env:
+#   ANEKA_OWNER_WHATSAPP_NUMBER=447700900123
+#   WHATSAPP_DRY_RUN=true
+
+npm run dev          # terminal 1
+npm run aneka:chat   # terminal 2 — type as the caller
+```
+
+Dry-run WhatsApp sends are logged on the Mastra server as `[whatsapp:dry-run] ...`.
+
+### Live voice (LiveKit)
+
+1. Set `LIVEKIT_URL`, `LIVEKIT_API_KEY`, and `LIVEKIT_API_SECRET` in `.env`
+2. Download VAD / turn-detection models once: `npm run voice:download-files`
+3. Run the worker: `npm run voice:worker`
+4. Run the Mastra server: `npm run dev`
+5. Open the [LiveKit Agents Playground](https://agents-playground.livekit.io) against your
+   project, or `POST /voice/livekit/connection-details` (authenticated) to mint a room token
+
+The worker answers as `anekaAgent`. Agent-initiated hang-up uses the `end_call` tool after a
+successful `whatsapp_send_message`.
+
+### Owner WhatsApp (production)
+
+Set Meta WhatsApp Cloud API credentials and turn off dry-run:
+
+```bash
+WHATSAPP_DRY_RUN=false
+WHATSAPP_ACCESS_TOKEN=...
+WHATSAPP_PHONE_NUMBER_ID=...
+ANEKA_OWNER_WHATSAPP_NUMBER=4477...   # owner destination, E.164 without +
+```
+
+Override demo business copy with `ANEKA_*` env vars (see `.env.example`).
+
 ## License
 
 MIT -- see [LICENSE](./LICENSE).
