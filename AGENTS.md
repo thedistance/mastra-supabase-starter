@@ -53,6 +53,16 @@ key is set as an environment secret, mirror it into `.env` since scripts load co
 `src/mastra/studio-auth.ts`. Log in at `http://localhost:4111` with the seeded demo account
 `demo@example.com` / `local-demo-password` (sign-up is disabled; local-only credentials).
 
+### Test suite: expect 3 pre-existing failures (not environment issues)
+
+With `OPENAI_API_KEY` set, `npm test` currently reports 5 passing / 3 failing against the
+pinned `@mastra/*` versions. The 3 failures are test-strictness/version quirks, not broken
+functionality: the two `auth.test.ts` "accepts ... (200)" cases call `agent.generate(...)`
+without a `thread`, which this Memory version rejects with "A resourceId and a threadId must be
+provided"; and `rag.test.ts` "warranty question" asserts the literal substring `"2 year"` while
+the model replies "2-year". Invoked correctly (with a `thread`, as `npm run chat` and the memory
+tests do), RAG, memory, and auth all work — verified via the CLI/API and Studio.
+
 ### Node version note
 
 `npm install` emits `EBADENGINE` warnings (a couple of transitive deps want Node ≥22.18; the
