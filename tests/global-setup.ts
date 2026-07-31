@@ -37,6 +37,12 @@ async function waitForServer(): Promise<void> {
 }
 
 export default async function globalSetup() {
+  // Pure unit tests (e.g. Aneka prompt/WhatsApp helpers) can opt out of booting Mastra.
+  if (process.env.VITEST_SKIP_SERVER === "1") {
+    console.log("[tests] VITEST_SKIP_SERVER=1 — skipping Mastra server boot.");
+    return async () => {};
+  }
+
   for (const name of ["SUPABASE_URL", "SUPABASE_ANON_KEY", "SUPABASE_DB_URL"]) {
     if (!process.env[name]) {
       throw new Error(
